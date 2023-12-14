@@ -90,12 +90,9 @@ for (var i=0;i<lines.length;i++){
 
 //find the full no
 
-for 
+Object.entries(numericPos).forEach(([key2,value2])=>{
+    let lineNO=key
 
-
-
-
-
-
-
-
+    Object.entries(value).forEach(([]))
+    
+})
