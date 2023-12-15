@@ -140,6 +140,7 @@ for (var i=0;i<lines.length;i++){
             continue
         }    
     }
+break
 }
 
 console.log(totSum)

@@ -1,0 +1,13 @@
+high        :   3551505
+
+not correct :   1133511
+answer : x
+
+not correct :   607509
+
+not correct :   547025
+546312
+
+low :           543410
+
+        

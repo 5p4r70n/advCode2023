@@ -7,8 +7,10 @@ var splCharsPos={}
 var numericPos={}
 
 var aroundPos=(line,pos)=>{
-
+    line=Number(line)
+    pos=Number(pos)
     function hasCommonElement(array1, array2) {
+        // console.log(array1,array2)
         return array1.some(value => array2.includes(value));
       }
 
@@ -32,25 +34,26 @@ var aroundPos=(line,pos)=>{
     let checkUpDown = function(){
         if (aboveLine){
             circle[line-1]=[]
-            circle[line-1].push(pos-1)
+            if (leftVal){circle[line-1].push(pos-1)}
             circle[line-1].push(pos)
-            circle[line-1].push(pos+1)
+            if (rightVal){circle[line-1].push(pos+1)}
         }
         
         if (belowLine){
             circle[line+1]=[]
-            circle[line+1].push(pos-1)
+            if (leftVal){circle[line+1].push(pos-1)}
             circle[line+1].push(pos)
-            circle[line+1].push(pos+1)
+            if (rightVal){circle[line+1].push(pos+1)}
         }
     }
 
     checkLeftRight();checkUpDown(); // finding the around values
+    // console.log(circle)
 
     let isAdjecentToSplChar = function(){  
         let returnVal=false  
-
         Object.entries(circle).forEach(([key, value]) => {
+            // console.log(key, value);
             if (hasCommonElement(value,splCharsPos[key])){returnVal=true}
           });
 
@@ -76,23 +79,86 @@ for (var i=0;i<lines.length;i++){
     }
 }
 
-//loading numerics
-for (var i=0;i<lines.length;i++){
-    var row=lines[i]
-    numericPos[i]={}
-    for (var j=0;j<row.length;j++){
-        var char=row[j]
-        if (!isNaN(char)){
-            numericPos[i][j]=char
-        }
-    }
-}
+// //loading numerics
+// for (var i=0;i<lines.length;i++){
+//     var row=lines[i]
+//     numericPos[i]={}
+//     for (var j=0;j<row.length;j++){
+//         var char=row[j]
+//         if (!isNaN(char)){
+//             numericPos[i][j]=char
+//         }
+//     }
+// }
 
 //find the full no
 
-Object.entries(numericPos).forEach(([key2,value2])=>{
-    let lineNO=key
+// Object.entries(numericPos).forEach(([lineNO,lineValue])=>{
+//     console.log(lineNO)
 
-    Object.entries(value).forEach(([]))
+//     Object.entries(lineValue).forEach(([positionValue,value])=>{
+//         // console.log(lineNO,positionValue)
+//         // console.log(aroundPos(lineNO,positionValue))
+
+//         if (aroundPos(lineNO,positionValue)){
+//             console.log(lineNO,positionValue,value)
+//         }
+
+//     })
     
-})
+// })
+
+// console.log(aroundPos(0,9))
+
+
+let totSum=0
+
+for (var i=0;i<lines.length;i++){
+    var row=lines[i]
+    let numberFound=false
+    let validFound=false
+    let theChar=""
+    //..708.220.184.
+    for (var j=0;j<row.length;j++){
+        let char=row[j]
+
+        console.log(i,j,numberFound,validFound)
+
+        if ((char==="." || splChars.includes(char))  && !numberFound){
+            theChar=""
+            // console.log( ". check ")
+            continue
+        }
+        
+        if ((char==="." || splChars.includes(char)) && numberFound && !validFound){
+            theChar=""
+            // console.log( ". check ")
+            continue
+        }
+        
+
+        if((char==="." || splChars.includes(char)) && validFound){
+            totSum+=Number(theChar)
+            console.log( "Valid found ",theChar)
+            theChar=''
+            validFound=false
+            numberFound=false
+            continue
+        }
+
+        if (!isNaN(char)){
+            numberFound=true
+            if (aroundPos(i,j)){
+                validFound=true
+            }
+            theChar+=char
+            // console.log( "number found")
+            console.log(theChar)
+            continue
+        }    
+    }
+   
+}
+
+console.log(totSum)
+
