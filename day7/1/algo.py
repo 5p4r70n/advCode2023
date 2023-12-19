@@ -1,3 +1,7 @@
+## using weightage sort
+## use always waightage "(14**(5-i))" bigger than dict values, here 13 is bigger so use 13 or more
+#smaller values make the given weight makes chaos in sorting
+
 data=open("data.txt","r").readlines()
 masterData={i.split(" ")[0].strip():i.split(" ")[1].strip() for i in data}
 
@@ -12,28 +16,82 @@ cardsSorted={
 }
 
 dictionary={
-    "A":12, "K":11, "Q":10, "J":9, "T":8, "9":7, "8":6, "7":5, "6":4, "5":3, "4":2, "3":1, "2":0
+    "A":13, "K":12, "Q":11, "J":10, "T":9, "9":8, "8":7, "7":6, "6":5, "5":4, "4":3, "3":2, "2":1
 }
 
-def calc(card:str):
-   returnData={}
-   for i in card:
-       returnData[i]=card.count(i)
-   print(returnData)
+
+def weightCalc (cardName):
+    weight=0
+    for i in range(0,len(cardName)):
+        weight+= dictionary[cardName[i]]*((14**(5-i)))
+        # print(weight)
+    return weight
+
+def calc(card:dict):
+   charCount={}
    
-   if len(returnData) ==1:
+   for i in card["name"]:
+       charCount[i]=card["name"].count(i)
+       
+   card["weight"]=weightCalc(card["name"])
+   
+   
+   if len(charCount) ==1:
         cardsSorted["fiveKind"].append(card)
-   elif len(returnData) ==2:
-       cardsSorted["fourKind"].append(card)
+   elif len(charCount) ==2:
+       for i in charCount:
+           if charCount[i] == 4:       
+                cardsSorted["fourKind"].append(card)
+                break
+           if charCount[i] == 2:
+                cardsSorted["fullHouse"].append(card)
+                break
        
-   elif len(returnData)==2 and :
+   elif len(charCount) ==3:
+       for i in charCount:
+           if charCount[i] == 3:       
+                cardsSorted["threeKind"].append(card)
+                break
+           if charCount[i] == 2:
+                cardsSorted["twoPair"].append(card)
+                break
+   elif len(charCount) ==4:
+       cardsSorted["onePair"].append(card)
+   elif len(charCount) ==5:
+       cardsSorted["highCard"].append(card)
         
-       
-        
-        
+for i in masterData:
+    calc({"name":i,"value":int(masterData[i])})
+
+tot=0
+for i in cardsSorted:
+    tot+=len(cardsSorted[i])
+    # print(i,len(cardsSorted[i]))
+print(tot)
+
+## sorting the cards
+for i in cardsSorted:
+    # print(cardsSorted[i])
+    cardsSorted[i]=sorted(cardsSorted[i], key=lambda x: x['weight'],reverse=True)
+    # print(cardsSorted[i])
+
+listOfValue=[]
+
+for i in cardsSorted:
+    for cards in cardsSorted[i]:
+        listOfValue.append(cards["value"])
 
 
+count=1
+finalValue=0
+for i in listOfValue[::-1]:
+    # print(i,"X",count)
+    finalValue+=i*count
+    count+=1
 
-calc("KKKTT")
+print(finalValue)
 
-print(cardsSorted)
+
+# print(weightCalc("AAT5A"))
+# print("\n")
+# print(weightCalc("AAJA2"))
